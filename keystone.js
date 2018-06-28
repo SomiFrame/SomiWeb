@@ -11,8 +11,8 @@ var handlebars = require('express-handlebars');
 // and documentation.
 
 keystone.init({
-	'name': 'SomiBlog',
-	'brand': 'SomiBlog',
+	'name': 'Somi',
+	'brand': 'Somi',
 
 	'sass': 'public',
 	'static': 'public',
@@ -31,7 +31,7 @@ keystone.init({
 	'auto update': true,
 	'session': true,
 	'auth': true,
-	'user model': 'Y',
+	'user model': 'User',
 });
 
 // Load your project's Models
@@ -56,10 +56,8 @@ keystone.set('nav', {
 	posts: ['posts', 'post-categories'],
 	galleries: 'galleries',
 	enquiries: 'enquiries',
-	ys: 'ys',
+	users: 'users',
 });
-
-//
 
 // Start Keystone to connect to your database and initialise the web server
 
