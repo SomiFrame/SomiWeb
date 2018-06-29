@@ -13,7 +13,7 @@ var handlebars = require('express-handlebars');
 keystone.init({
 	'name': 'Somi',
 	'brand': 'Somi',
-
+	'port' : '3031',
 	'sass': 'public',
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
@@ -54,6 +54,7 @@ keystone.set('routes', require('./routes'));
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
 	posts: ['posts', 'post-categories'],
+	videos: ['videos'],
 	galleries: 'galleries',
 	enquiries: 'enquiries',
 	users: 'users',
