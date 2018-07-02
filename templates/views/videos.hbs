@@ -1,0 +1,11 @@
+<div class="container">
+    <div>{{videos}}</div>
+    <div>
+        {{#if videos}}
+            {{#each videos}}
+                <h2>{{title}}</h2>
+                <img src="{{image.url}}" />
+            {{/each}}
+        {{/if}}
+    </div>
+</div>

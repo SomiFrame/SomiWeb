@@ -30,3 +30,5 @@ Video.schema.virtual('content.full').get(function () {
 
 Video.defaultColumns = 'title, state|20%, author|20%, publishedDate|20%';
 Video.register();
+
+

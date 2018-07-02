@@ -7,7 +7,7 @@ exports = module.exports = function (req, res) {
     locals.section = 'video'
 
     // load videos 
-    view.query('video', keystone.list('Video').model.find())
-
+    view.query('videos', keystone.list('Video').model.find())
+    console.log(view.res)
     view.render('videos')
 }
