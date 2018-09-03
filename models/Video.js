@@ -1,8 +1,15 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
-
+console.log(keystone.Storage.Adapters)
+var videoStorage = new keystone.Storage({
+    adapter: keystone.Storage.Adapters.FS,
+    fs: {
+        path: keystone.expandPath("./public/uploads/files"),
+        publicPath: "/public/uploads/files"
+    }
+})
 /**
- * Post Model
+ * Video Model
  * ==========
  */
 
@@ -21,7 +28,11 @@ Video.add({
 		brief: { type: Types.Html, wysiwyg: true, height: 150 },
 		extended: { type: Types.Html, wysiwyg: true, height: 400 },
 	},
-	categories: { type: Types.Relationship, ref: 'PostCategory', many: true },
+	categories: { type: Types.Relationship, ref: 'VideoCategory', many: true },
+    file: {
+        type: Types.File,
+        storage: videoStorage
+    }
 });
 
 Video.schema.virtual('content.full').get(function () {
@@ -30,5 +41,3 @@ Video.schema.virtual('content.full').get(function () {
 
 Video.defaultColumns = 'title, state|20%, author|20%, publishedDate|20%';
 Video.register();
-
-
