@@ -1,11 +1,28 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 console.log(keystone.Storage.Adapters)
-var videoStorage = new keystone.Storage({
-    adapter: keystone.Storage.Adapters.FS,
-    fs: {
-        path: keystone.expandPath("./public/uploads/files"),
-        publicPath: "/public/uploads/files"
+//var videoStorage = new keystone.Storage({
+//    adapter: keystone.Storage.Adapters.FS,
+//    fs: {
+//        path: keystone.expandPath("./public/uploads/files"),
+//        publicPath: "/public/uploads/files"
+//    }
+//})
+var storage = new keystone.Storage({
+    adapter: require('keystone-storage-adapter-s3'),
+    s3: {
+        key:'AKIAIE7Y367MIFOH263A',
+        secret:'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',
+        bucket: 'somi-test',
+        region: 'ap-northeast-1',
+        path:'/videos',
+        publicUrl: 'https://dhy93sfkscbq7.cloudfront.net'
+    },
+    schema: {
+        bucket: true,
+        etag: true,
+        path: true,
+        url: true
     }
 })
 /**
@@ -31,9 +48,9 @@ Video.add({
 	categories: { type: Types.Relationship, ref: 'VideoCategory', many: true },
     file: {
         type: Types.File,
-        storage: videoStorage
-    }
-});
+        storage: storage
+    }}
+);
 
 Video.schema.virtual('content.full').get(function () {
 	return this.content.extended || this.content.brief;

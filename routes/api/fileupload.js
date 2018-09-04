@@ -27,6 +27,7 @@ exports.update = (req,res) =>{
         if(err) return res.apiError('database error',err)
         if(!item) return res.apiError('not found')
         var data = (req.method=='POST')?req.body:req.query;
+        console.log(req.body,req.query)
         item.getUpdateHandler(req).process(data,(err)=>{
             if(err) return res.apiError('create error',err)
             res.apiResponse({
@@ -39,6 +40,7 @@ exports.update = (req,res) =>{
 exports.create = (req,res) =>{
     var item = new FileData.model();
     var data = (req.method=='POST')?req.body:req.query;
+    console.log(req.body,req.query)
     item.getUpdateHandler(req).process(req.files,(err)=>{
         if(err) return res.apiError('error',err)
         res.apiResponse({

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World</title>
+    </head>
+
+    <body>
+      <h1>Upload a new file</h1>
+        <form id="form2" action="/api/fileupload/create" method="POST" enctype='multipart/form-data'>
+          <div>
+            <input type="file" id="file_upload" />
+            <br>
+            <label for="file_name">Give the file a name:<input type="text" name="file_name" id="file_name" />
+            </label>
+          </div>
+            <br>
+      <div>
+            <center><input type="button" value="Upload" onclick="uploadFile()"></center>
+    </div>
+    </form>
+<br>
+<div>
+<h2>Uploaded File List:</h2>
+<ul id="file_list">
+</ul>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+          //debugger;
+
+});
+
+function uploadFile() {
+      //debugger;
+
+      var selectedFile = $('#file_upload').get(0).files[0];
+
+      //Error handling
+      if(selectedFile == undefined)
+            alert('You did not select a file!');
+
+      //Create the FormData data object and append the file to it.
+      var newFile = new FormData();
+      newFile.append('file_upload', selectedFile); //This is the raw file that was selected
+
+      //Set the form options.
+var opts = {
+            url: '/api/fileupload/create',
+            data: newFile,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+
+            //This function is executed when the file uploads successfully.
+            success: function(data){
+                  //Dev Note: KeystoneAPI only allows file and image uploads with the file itself. Any extra metadata will have to
+                  //be uploaded/updated with a second call.
+
+                  //debugger;
+                  console.log('File upload succeeded! ID: ' + data.file_upload._id);
+
+                  //Fill out the file metadata information
+                  data.file_upload.name = $('#file_name').val();
+                  data.file_upload.url = '/uploads/files/'+data.file_upload.file.filename;
+                  data.file_upload.fileType = data.file_upload.file.mimetype;
+                  data.file_upload.createdTimeStamp = new Date();
+
+                  //Update the file with the information above.
+                $.get('/api/fileupload/'+data.file_upload._id+'/update', data.file_upload, function(data) {
+                            //debugger;
+
+                            console.log('File information updated.');
+
+                            //Add the uploaded file to the uploaded file list.
+                            $('#file_list').append('<li><a href="'+data.collection.url+'" download>'+data.collection.name+'</a></li>');
+
+                })
+                  //If the metadata update fails:
+                .fail(function(data) {
+                                debugger;
+
+                                console.error('The file metadata was not updated. Here is the error message from the server:');
+                                console.error('Server status: '+err.status);
+                                console.error('Server message: '+err.statusText);
+
+                                alert('Failed to connect to the server while trying to update file metadata!');
+                });
+            },
+            //This error function is called if the POST fails for submitting the file itself.
+            error: function(err) {
+                  //debugger;
+
+                  console.error('The file was not uploaded to the server. Here is the error message from the server:');
+                  console.error('Server status: '+err.status);
+                  console.error('Server message: '+err.statusText);
+
+                  alert('Failed to connect to the server!');
+            }
+        };
+
+      //Execute the AJAX call.
+      jQuery.ajax(opts);
+
+    
+}
+</script>
+</body>
+</html>
